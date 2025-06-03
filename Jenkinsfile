@@ -56,9 +56,13 @@
 // }
 
 
-
+// Option 2
 pipeline {
     agent any
+
+    tools {
+        nodejs 'NodeJS-18' // Name from Global Tool Configuration
+    }
 
     environment {
         SONAR_AUTH_TOKEN = credentials('SonarQube-token')
@@ -74,11 +78,8 @@ pipeline {
         stage('Build & Test with Coverage') {
             steps {
                 script {
-                    // Adjust this command based on your language & test framework
-                    // Example: for Node.js + Jest coverage
                     sh 'npm install'
                     sh 'npm test -- --coverage'  
-                    // This will create coverage report under coverage/lcov.info by default
                 }
             }
         }
