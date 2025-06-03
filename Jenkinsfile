@@ -61,10 +61,21 @@
 pipeline {
     agent any
 
+    environment {
+        JAVA_HOME = '/usr/lib/jvm/java-17-openjdk-amd64'
+        PATH = "${env.JAVA_HOME}/bin:${env.PATH}"
+    }
+
     stages {
+        stage('Check Java') {
+            steps {
+                sh 'java -version'
+            }
+        }
+
         stage('SonarQube Analysis') {
             steps {
-                withSonarQubeEnv('Sonar-server') { // Use the exact name of your SonarQube server in Jenkins
+                withSonarQubeEnv('Sonar-server') {
                     sh 'sonar-scanner'
                 }
             }
