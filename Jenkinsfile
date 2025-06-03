@@ -8,20 +8,22 @@ pipeline {
             }
         }
 
-        stage('SonarQube Analysis') {
-            steps {
-                withSonarQubeEnv('Sonar-server') {
-                    // Use SonarQube Scanner tool configured in Jenkins
-                    tool name: 'Sonar-scanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
-                    sh '''
-                      ${tool('Sonar-scanner')}/bin/sonar-scanner \
-                        -Dsonar.projectKey=Project-five \
-                        -Dsonar.sources=. \
-                        -Dsonar.host.url=$SONAR_HOST_URL \
-                        -Dsonar.login=$SONAR_AUTH_TOKEN
-                    '''
-                }
+      stage('SonarQube Analysis') {
+    steps {
+        withSonarQubeEnv('Sonar-server') {
+            script {
+                def scannerHome = tool name: 'SonarScanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
+                sh """
+                    ${scannerHome}/bin/sonar-scanner \
+                      -Dsonar.projectKey=Project-five \
+                      -Dsonar.sources=. \
+                      -Dsonar.host.url=$SONAR_HOST_URL \
+                      -Dsonar.login=$SONAR_AUTH_TOKEN
+                """
             }
         }
+    }
+}
+
     }
 }
