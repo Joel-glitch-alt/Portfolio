@@ -205,17 +205,23 @@ pipeline {
             }
             post {
                 always {
-                    // Archive test results if they exist
-                    publishTestResults testResultsPattern: 'test-results.xml', allowEmptyResults: true
-                    // Archive coverage reports
-                    publishHTML([
-                        allowMissing: false,
-                        alwaysLinkToLastBuild: true,
-                        keepAll: true,
-                        reportDir: 'coverage',
-                        reportFiles: 'index.html',
-                        reportName: 'Coverage Report'
-                    ])
+                    // Archive test results if they exist (using junit step)
+                    script {
+                        if (fileExists('test-results.xml')) {
+                            junit 'test-results.xml'
+                        }
+                        // Archive coverage reports if they exist
+                        if (fileExists('coverage/index.html')) {
+                            publishHTML([
+                                allowMissing: false,
+                                alwaysLinkToLastBuild: true,
+                                keepAll: true,
+                                reportDir: 'coverage',
+                                reportFiles: 'index.html',
+                                reportName: 'Coverage Report'
+                            ])
+                        }
+                    }
                 }
             }
         }
