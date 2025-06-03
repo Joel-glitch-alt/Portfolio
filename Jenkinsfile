@@ -58,6 +58,7 @@
 
 
 // //Option 2pipeline {
+   pipeline {
     agent any
 
     stages {
@@ -69,4 +70,5 @@
             }
         }
     }
+}
 
