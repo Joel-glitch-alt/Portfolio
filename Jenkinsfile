@@ -57,12 +57,12 @@
 
 
 
-// //Option 2pipeline {
- pipeline {
+// //Option 2pipeline 
+pipeline {
     agent any
 
     tools {
-        nodejs "NodeJS-18"  // Your NodeJS tool name
+        nodejs "NodeJS-18" // Must match your Node.js installation name in Jenkins
     }
 
     environment {
@@ -79,7 +79,15 @@
         stage('Install Dependencies') {
             steps {
                 sh '''
+                  echo "Node version:"
+                  node -v
+                  echo "NPM version:"
+                  npm -v
+
+                  echo "Installing dependencies..."
                   npm install
+
+                  echo "Making Jest executable..."
                   chmod +x ./node_modules/.bin/jest
                 '''
             }
@@ -95,9 +103,12 @@
             steps {
                 withSonarQubeEnv('Sonar-server') {
                     sh '''
+                        echo "Setting Java environment..."
                         export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
                         export PATH=$JAVA_HOME/bin:$PATH
                         java -version
+
+                        echo "Running SonarScanner..."
                         sonar-scanner \
                           -Dsonar.projectKey=project-five \
                           -Dsonar.projectName="Project-five" \
@@ -127,7 +138,3 @@
         }
     }
 }
-
-
-
-
