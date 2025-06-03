@@ -76,20 +76,24 @@ pipeline {
             }
         }
 
-        stage('Install Dependencies') {
-            steps {
-                sh '''
-                  echo "Node version:"
-                  node -v
-                  
-                  echo "NPM version:"
-                  npm -v
+            stage('Install Dependencies') {
+    steps {
+        sh '''
+            echo "Node version:"
+            node -v
 
-                  echo "Installing dependencies..."
-                  npm install
-                '''
-            }
-        }
+            echo "NPM version:"
+            npm -v
+
+            echo "Installing dependencies..."
+            npm install
+
+            echo "Making jest executable..."
+            chmod +x ./node_modules/.bin/jest
+        '''
+    }
+}
+
 
         stage('Run Tests and Coverage') {
             steps {
