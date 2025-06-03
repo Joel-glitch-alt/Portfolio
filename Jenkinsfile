@@ -58,35 +58,71 @@
 
 
 // //Option 2pipeline {
-pipeline {
+ pipeline {
     agent any
 
+    tools {
+        nodejs "NodeJS_18" // Match your Jenkins NodeJS tool installation name
+        // Assuming sonar-scanner tool configured as "sonar-scanner"
+    }
+
     environment {
-        JAVA_HOME = '/usr/lib/jvm/java-17-openjdk-amd64'
-        PATH = "${env.JAVA_HOME}/bin:${env.PATH}"
+        PATH = "${tool('sonar-scanner')}/bin:${env.PATH}"
     }
 
     stages {
-        stage('Check Java') {
+        stage('Checkout') {
             steps {
-                sh 'java -version'
+                checkout scm
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                sh '''
+                  npm install
+                  chmod +x ./node_modules/.bin/jest
+                '''
+            }
+        }
+
+        stage('Run Tests and Coverage') {
+            steps {
+                sh 'npm test'
             }
         }
 
         stage('SonarQube Analysis') {
-    steps {
-        withSonarQubeEnv('Sonar-server') {
-            // Export JAVA_HOME just before sonar-scanner runs
-            sh '''
-                export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
-                export PATH=$JAVA_HOME/bin:$PATH
-                java -version  # confirm version here
-                sonar-scanner
-            '''
+            steps {
+                withSonarQubeEnv('Sonar-server') {
+                    sh '''
+                        SonarScanner \
+                          -Dsonar.projectKey=project-five \
+                          -Dsonar.projectName="Project-five" \
+                          -Dsonar.sources=. \
+                          -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info \
+                          -Dsonar.sourceEncoding=UTF-8
+                    '''
+                }
+            }
+        }
+
+        stage('Quality Gate') {
+            steps {
+                timeout(time: 20, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
+                }
+            }
         }
     }
-}
 
+    post {
+        always {
+            echo 'Pipeline completed. See SonarQube dashboard for results.'
+        }
+        failure {
+            echo '❌ Pipeline failed. Check logs.'
+        }
     }
 }
 
