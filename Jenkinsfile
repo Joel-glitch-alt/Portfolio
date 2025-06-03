@@ -102,7 +102,7 @@
             }
         }
 
-               stage('SonarQube Analysis') {
+                     stage('SonarQube Analysis') {
     steps {
         withCredentials([string(credentialsId: 'mysonar-token', variable: 'SONAR_TOKEN')]) {
             withSonarQubeEnv('Sonar-server') {
@@ -117,12 +117,14 @@
                       -Dsonar.sources=. \
                       -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info \
                       -Dsonar.sourceEncoding=UTF-8 \
-                      -Dsonar.login=$SONAR_TOKEN
+                      -Dsonar.login=$SONAR_TOKEN \
+                      -Dsonar.nodejs.executable=/usr/bin/node
                 '''
             }
         }
     }
 }
+
 
 
 
