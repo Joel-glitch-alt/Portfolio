@@ -58,14 +58,8 @@
 
 
 //Option 2
-
 pipeline {
-    agent {
-        docker {
-            image 'node:18-alpine'
-            args '-v /var/run/docker.sock:/var/run/docker.sock'
-        }
-    }
+    agent any
 
     environment {
         SONAR_AUTH_TOKEN = credentials('SonarQube-token')
@@ -75,6 +69,8 @@ pipeline {
         stage('Say Hello') {
             steps {
                 echo 'Hello from Jenkins pipeline!'
+                sh 'node --version'
+                sh 'npm --version'
             }
         }
 
