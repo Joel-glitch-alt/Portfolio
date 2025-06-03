@@ -102,14 +102,14 @@
             }
         }
 
-             stage('SonarQube Analysis') {
+               stage('SonarQube Analysis') {
     steps {
         withCredentials([string(credentialsId: 'mysonar-token', variable: 'SONAR_TOKEN')]) {
             withSonarQubeEnv('Sonar-server') {
                 sh '''
                     export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
                     export PATH=$JAVA_HOME/bin:$PATH
-                    java -version
+                    export SONAR_SCANNER_OPTS="-Xmx2048m"
 
                     sonar-scanner \
                       -Dsonar.projectKey=project-five \
@@ -123,6 +123,7 @@
         }
     }
 }
+
 
 
         stage('Quality Gate') {
