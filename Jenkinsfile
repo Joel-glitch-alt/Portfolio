@@ -142,38 +142,40 @@ pipeline {
                     }
                 }
                 
-                stage('Test with Coverage') {
-                    steps {
-                        echo 'Running tests with coverage...'
-                        sh '''
-                            # Ensure test script exists
-                            if ! npm run test --silent 2>/dev/null; then
-                                echo "No test script found, skipping tests"
-                                exit 0
-                            fi
-                            
-                            # Fix permissions if needed
-                            chmod +x ./node_modules/.bin/* 2>/dev/null || true
-                            
-                            # Run tests with coverage
-                            npm test -- --coverage --watchAll=false --passWithNoTests
-                        '''
-                        
-                        // Archive test results if they exist
-                        script {
-                            if (fileExists('coverage/lcov.info')) {
-                                publishHTML([
-                                    allowMissing: false,
-                                    alwaysLinkToLastBuild: true,
-                                    keepAll: true,
-                                    reportDir: 'coverage/lcov-report',
-                                    reportFiles: 'index.html',
-                                    reportName: 'Coverage Report'
-                                ])
-                            }
+                  //
+                  stage('Test with Coverage') {
+            steps {
+                echo 'Running tests with coverage...'
+                sh '''
+                    # Fix permissions if needed
+                    chmod +x ./node_modules/.bin/* 2>/dev/null || true
+                    
+                    # Run tests with coverage
+                    npm test -- --coverage --watchAll=false --passWithNoTests
+                    
+                    # Display coverage summary in console
+                    if [ -f coverage/lcov.info ]; then
+                        echo "✅ Coverage report generated successfully"
+                        echo "📊 Coverage files created:"
+                        ls -la coverage/
+                    else
+                        echo "⚠️ No coverage report found"
+                    fi
+                '''
+            }
+            
+            post {
+                always {
+                    // Archive coverage files
+                    script {
+                        if (fileExists('coverage')) {
+                            archiveArtifacts artifacts: 'coverage/**/*', allowEmptyArchive: true
+                            echo "📊 Coverage reports archived - check build artifacts"
                         }
                     }
                 }
+            }
+        }
             }
         }
 
