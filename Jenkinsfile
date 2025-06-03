@@ -92,20 +92,24 @@
             }
         }
 
-        stage('SonarQube Analysis') {
-            steps {
-                withSonarQubeEnv('Sonar-server') {
-                    sh '''
-                        SonarScanner \
-                          -Dsonar.projectKey=project-five \
-                          -Dsonar.projectName="Project-five" \
-                          -Dsonar.sources=. \
-                          -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info \
-                          -Dsonar.sourceEncoding=UTF-8
-                    '''
-                }
-            }
+          stage('SonarQube Analysis') {
+    steps {
+        withSonarQubeEnv('Sonar-server') {
+            sh '''
+                export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+                export PATH=$JAVA_HOME/bin:$PATH
+                java -version  # For verification in logs
+                sonar-scanner \
+                  -Dsonar.projectKey=project-five \
+                  -Dsonar.projectName="Project-five" \
+                  -Dsonar.sources=. \
+                  -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info \
+                  -Dsonar.sourceEncoding=UTF-8
+            '''
         }
+    }
+}
+
 
         stage('Quality Gate') {
             steps {
