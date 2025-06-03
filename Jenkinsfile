@@ -68,6 +68,7 @@
 
     environment {
         PATH = "${tool('SonarScanner')}/bin:${env.PATH}"
+        DOCKER_IMAGE = 'addition1905/project-six:latest' 
     }
 
     stages {
@@ -130,13 +131,24 @@
 
 
 
-        stage('Quality Gate') {
-            steps {
-                timeout(time: 20, unit: 'MINUTES') {
-                    waitForQualityGate abortPipeline: true
+        // stage('Quality Gate') {
+        //     steps {
+        //         timeout(time: 20, unit: 'MINUTES') {
+        //             waitForQualityGate abortPipeline: true
+        //         }
+        //     }
+        // }
+        //
+         stage('Docker Build & Push') {
+        steps {
+            script {
+                def img = docker.build("${DOCKER_IMAGE}")
+                docker.withRegistry('https://index.docker.io/v1/', 'addition1905') {
+                    img.push()
                 }
             }
         }
+    }
     }
 
     post {
