@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Joel Joseph Doku | Software Engineer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-dark: #1e40af;
+      --primary-light: #3b82f6;
+      --secondary: #6b7280;
+      --light: #f9fafb;
+      --dark: #111827;
+      --gray: #e5e7eb;
+    }
+    
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background-color: #f5f7fa;
+      color: var(--dark);
+      line-height: 1.6;
+    }
+
+    header {
+      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+      color: white;
+      padding: 2.5rem 2rem;
+      text-align: center;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 2.8rem;
+      font-weight: 700;
+    }
+
+    .header-contact {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      margin: 1.2rem 0;
+    }
+
+    .header-contact-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .header-contact-item i {
+      font-size: 1.1rem;
+    }
+
+    .social-links-header {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .social-link-header {
+      color: white;
+      font-size: 1.3rem;
+      transition: transform 0.3s ease;
+    }
+
+    .social-link-header:hover {
+      transform: translateY(-3px);
+    }
+
+    p.subtitle {
+      margin-top: 0.5rem;
+      font-size: 1.3rem;
+      font-weight: 400;
+      opacity: 0.9;
+    }
+
+    .section {
+      padding: 3rem 0;
+      border-bottom: 1px solid var(--gray);
+    }
+
+    .section:last-child {
+      border-bottom: none;
+    }
+
+    h2 {
+      color: var(--primary-dark);
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+      position: relative;
+      padding-bottom: 0.5rem;
+    }
+
+    h2:after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 60px;
+      height: 4px;
+      background: var(--primary);
+    }
+
+    .card-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .card {
+      background: white;
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .card h3 {
+      color: var(--primary-dark);
+      margin-top: 0;
+    }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+
+    .skill-category {
+      background: white;
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .skill-category h3 {
+      color: var(--primary);
+      margin-top: 0;
+      font-size: 1.1rem;
+      border-bottom: 2px solid var(--gray);
+      padding-bottom: 0.5rem;
+    }
+
+    .skill-list {
+      list-style: none;
+      padding: 0;
+      margin: 0.5rem 0 0 0;
+    }
+
+    .skill-list li {
+      margin-bottom: 0.5rem;
+      position: relative;
+      padding-left: 1.2rem;
+    }
+
+    .skill-list li:before {
+      content: '•';
+      position: absolute;
+      left: 0;
+      color: var(--primary);
+    }
+
+    footer {
+      background: var(--dark);
+      color: white;
+      padding: 2rem 0;
+      text-align: center;
+    }
+
+    .footer-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .copyright {
+      margin-top: 1rem;
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 2.2rem;
+      }
+      
+      .header-contact {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.8rem;
+      }
+      
+      p.subtitle {
+        font-size: 1.1rem;
+      }
+      
+      .card-container,
+      .skills-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="container">
+      <h1>Joel Joseph Doku</h1>
+      
+      <div class="header-contact">
+        <a href="tel:+233593380107" class="header-contact-item">
+          <i class="fas fa-phone"></i>
+          <span>+233 59 338 0107</span>
+        </a>
+        
+        <a href="mailto:joeladdition@gmail.com" class="header-contact-item">
+          <i class="fas fa-envelope"></i>
+          <span>joeladdition@gmail.com</span>
+        </a>
+        
+        <div class="header-contact-item">
+          <i class="fas fa-map-marker-alt"></i>
+          <span>Accra, Ghana</span>
+        </div>
+      </div>
+      
+      <div class="social-links-header">
+        <a href="https://github.com/Joel-glitch-alt" target="_blank" class="social-link-header">
+          <i class="fab fa-github"></i>
+        </a>
+        <a href="https://www.linkedin.com/in/joel-addition-946252244" target="_blank" class="social-link-header">
+          <i class="fab fa-linkedin-in"></i>
+        </a>
+      </div>
+      
+      <p class="subtitle">Software & Cloud Engineer</p>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="section">
+      <h2>Professional Profile</h2>
+      <div class="card">
+        <p>
+          I am a skilled Software and Cloud Engineer with experience in full-stack development, cloud infrastructure, and CI/CD automation. My expertise includes building backend services with Node.js and Django, creating responsive UIs with React, and developing cross-platform mobile applications with Flutter.
+        </p>
+        <p>
+          I have hands-on experience with cloud-native development using Azure and implementing DevOps practices with tools like Jenkins, Docker, Kubernetes, and Terraform to streamline development workflows and infrastructure management.
+        </p>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Core Competencies</h2>
+      <div class="skills-grid">
+        <div class="skill-category">
+          <h3>Backend Development</h3>
+          <ul class="skill-list">
+            <li>Node.js</li>
+            <li>Django</li>
+            <li>Python</li>
+            <li>API Development</li>
+          </ul>
+        </div>
+        
+        <div class="skill-category">
+          <h3>Frontend Development</h3>
+          <ul class="skill-list">
+            <li>React.js</li>
+            <li>JavaScript</li>
+            <li>HTML/CSS</li>
+            <li>Responsive Design</li>
+          </ul>
+        </div>
+        
+        <div class="skill-category">
+          <h3>Mobile Development</h3>
+          <ul class="skill-list">
+            <li>Flutter</li>
+            <li>Dart</li>
+            <li>Mobile UI/UX</li>
+          </ul>
+        </div>
+        
+        <div class="skill-category">
+          <h3>Cloud & DevOps</h3>
+          <ul class="skill-list">
+            <li>Microsoft Azure</li>
+            <li>Docker</li>
+            <li>Kubernetes</li>
+            <li>Terraform</li>
+            <li>CI/CD Pipelines(Jenkins)</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Featured Projects</h2>
+      <div class="card-container">
+        <div class="card">
+          <h3>E-Commerce Platform</h3>
+          <p>Developed a full-stack e-commerce solution with React frontend and Node.js backend, implementing secure payment processing and inventory management.</p>
+        </div>
+        <div class="card">
+          <h3>Task Management App</h3>
+          <p>Created a Flutter mobile application with Firebase backend for team task management, featuring real-time updates and notification system.</p>
+        </div>
+        <div class="card">
+          <h3>DevOps Pipeline</h3>
+          <p>Implemented CI/CD pipeline with Jenkins for automated testing and deployment of microservices architecture.</p>
+        </div>
+      </div>
+      <p style="margin-top: 2rem; text-align: center;">
+        <a href="https://github.com/Joel-glitch-alt" target="_blank" style="color: var(--primary); text-decoration: none; font-weight: 600;">View All Projects on GitHub <i class="fas fa-arrow-right"></i></a>
+      </p>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-content">
+      <div class="copyright">
+        &copy; 2025 Joel Joseph Doku. All Rights Reserved.
+      </div>
+    </div>
+  </footer>
+</body>
+
+</html>
