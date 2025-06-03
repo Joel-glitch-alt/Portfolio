@@ -74,12 +74,19 @@ pipeline {
         }
 
         stage('SonarQube Analysis') {
-            steps {
-                withSonarQubeEnv('Sonar-server') {
-                    sh 'sonar-scanner'
-                }
-            }
+    steps {
+        withSonarQubeEnv('Sonar-server') {
+            // Export JAVA_HOME just before sonar-scanner runs
+            sh '''
+                export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+                export PATH=$JAVA_HOME/bin:$PATH
+                java -version  # confirm version here
+                sonar-scanner
+            '''
         }
+    }
+}
+
     }
 }
 
