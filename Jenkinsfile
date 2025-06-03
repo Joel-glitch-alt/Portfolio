@@ -49,7 +49,7 @@ pipeline {
             echo '⚠️ Build unstable due to test failures.'
         }
         success {
-            echo '✅ Build completed successfully.'
+            echo '✅ Build completed successfully...'
         }
     }
 }
