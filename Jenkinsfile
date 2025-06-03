@@ -62,7 +62,7 @@
     agent any
 
     tools {
-        nodejs "NodeJS_18" // Match your Jenkins NodeJS tool installation name
+        nodejs "NodeJS-18" // Match your Jenkins NodeJS tool installation name
         // Assuming sonar-scanner tool configured as "sonar-scanner"
     }
 
