@@ -26,18 +26,18 @@ pipeline {
         }
     }
 
-    post {
-        always {
-            cleanWs()
-        }
-        failure {
-            echo '❌ Build failed. Check the logs above.'
-        }
-        unstable {
-            echo '⚠️ Build unstable due to test failures.'
-        }
-        success {
-            echo '✅ Build completed successfully.'
-        }
-    }
+    // post {
+    //     always {
+    //         cleanWs()
+    //     }
+    //     failure {
+    //         echo '❌ Build failed. Check the logs above.'
+    //     }
+    //     unstable {
+    //         echo '⚠️ Build unstable due to test failures.'
+    //     }
+    //     success {
+    //         echo '✅ Build completed successfully.'
+    //     }
+    // }
 }
