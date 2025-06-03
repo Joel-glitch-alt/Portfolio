@@ -58,17 +58,22 @@
 
 
 // //Option 2pipeline {
-   pipeline {
+pipeline {
     agent any
+
+    tools {
+        sonarQubeScanner 'SonarScanner' // Optional: If you configured this name in Global Tool Configuration
+    }
 
     stages {
         stage('Hello') {
             steps {
-                withSonarQubeEnv(credentialsId: 'SonarQube-token') {
-                    echo 'Hello'
+                withSonarQubeEnv('Sonar-server') { // <- Name of your SonarQube server in Jenkins
+                    echo 'Hello Sonar'
                 }
             }
         }
     }
 }
+
 
