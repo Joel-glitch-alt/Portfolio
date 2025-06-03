@@ -62,12 +62,11 @@
     agent any
 
     tools {
-        nodejs "NodeJS-18" // Match your Jenkins NodeJS tool installation name
-        // Assuming sonar-scanner tool configured as "sonar-scanner"
+        nodejs "NodeJS-18"  // Your NodeJS tool name
     }
 
     environment {
-        PATH = "${tool('sonar-scanner')}/bin:${env.PATH}"
+        PATH = "${tool('SonarScanner')}/bin:${env.PATH}"
     }
 
     stages {
@@ -92,24 +91,23 @@
             }
         }
 
-          stage('SonarQube Analysis') {
-    steps {
-        withSonarQubeEnv('Sonar-server') {
-            sh '''
-                export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
-                export PATH=$JAVA_HOME/bin:$PATH
-                java -version  # For verification in logs
-                sonar-scanner \
-                  -Dsonar.projectKey=project-five \
-                  -Dsonar.projectName="Project-five" \
-                  -Dsonar.sources=. \
-                  -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info \
-                  -Dsonar.sourceEncoding=UTF-8
-            '''
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv('Sonar-server') {
+                    sh '''
+                        export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+                        export PATH=$JAVA_HOME/bin:$PATH
+                        java -version
+                        sonar-scanner \
+                          -Dsonar.projectKey=project-five \
+                          -Dsonar.projectName="Project-five" \
+                          -Dsonar.sources=. \
+                          -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info \
+                          -Dsonar.sourceEncoding=UTF-8
+                    '''
+                }
+            }
         }
-    }
-}
-
 
         stage('Quality Gate') {
             steps {
@@ -129,6 +127,7 @@
         }
     }
 }
+
 
 
 
