@@ -105,7 +105,28 @@
 
 
 
-            stage('SonarQube Analysis') {
+//             stage('SonarQube Analysis') {
+//     steps {
+//         withCredentials([string(credentialsId: 'mysonar-token', variable: 'SONAR_TOKEN')]) {
+//             withSonarQubeEnv('Sonar-server') {
+//                 sh '''
+//                     export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+//                     export PATH=$JAVA_HOME/bin:$PATH
+//                     export SONAR_SCANNER_OPTS="-Xmx2048m"
+
+//                     sonar-scanner \
+//                       -Dsonar.projectKey=project-six \
+//                       -Dsonar.projectName="Project Six" \
+//                       -Dsonar.sources=. \
+//                       -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info \
+//                       -Dsonar.sourceEncoding=UTF-8 \
+//                       -Dsonar.login=$SONAR_TOKEN
+//                 '''
+//             }
+//         }
+//     }
+// }
+             stage('SonarQube Analysis') {
     steps {
         withCredentials([string(credentialsId: 'mysonar-token', variable: 'SONAR_TOKEN')]) {
             withSonarQubeEnv('Sonar-server') {
@@ -114,19 +135,25 @@
                     export PATH=$JAVA_HOME/bin:$PATH
                     export SONAR_SCANNER_OPTS="-Xmx2048m"
 
+                    # Explicitly set Node.js path (since Node.js is installed)
+                    export PATH=/usr/bin:$PATH  # Ensure Node.js is in PATH
+                    echo "Node.js path: $(which node)"
+                    echo "Node.js version: $(node -v)"
+
+                    # Run SonarScanner with Node.js config
                     sonar-scanner \
                       -Dsonar.projectKey=project-six \
                       -Dsonar.projectName="Project Six" \
                       -Dsonar.sources=. \
                       -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info \
                       -Dsonar.sourceEncoding=UTF-8 \
+                      -Dsonar.nodejs.executable=$(which node) \  # Force use of correct Node.js
                       -Dsonar.login=$SONAR_TOKEN
                 '''
             }
         }
     }
-}
-
+  }
 
 
 
