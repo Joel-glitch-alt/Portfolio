@@ -68,6 +68,7 @@ pipeline {
 
     environment {
         SONAR_AUTH_TOKEN = credentials('SonarQube-token')
+        SONAR_PROJECT_KEY = 'Project-five'
         NPM_CONFIG_CACHE = '/tmp/.npm'
         PATH = "$PATH:/tmp/sonar-scanner/bin"
     }
