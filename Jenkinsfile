@@ -59,7 +59,13 @@
 
 //Option 2
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'node:18-alpine'
+            // Mount docker socket if you need docker-in-docker
+            args '-v /var/run/docker.sock:/var/run/docker.sock'
+        }
+    }
 
     environment {
         SONAR_AUTH_TOKEN = credentials('SonarQube-token')
@@ -89,15 +95,21 @@ pipeline {
             steps {
                 withSonarQubeEnv('Sonar-server') {
                     script {
-                        def scannerHome = tool name: 'SonarScanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
-                        sh """
-                            ${scannerHome}/bin/sonar-scanner \
+                        // Install SonarScanner in the container
+                        sh '''
+                            # Install SonarScanner
+                            wget -q https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.8.0.2856-linux.zip
+                            unzip -q sonar-scanner-cli-4.8.0.2856-linux.zip
+                            export PATH=$PATH:$(pwd)/sonar-scanner-4.8.0.2856-linux/bin
+                            
+                            # Run SonarQube analysis
+                            sonar-scanner \
                                 -Dsonar.projectKey=Project-five \
                                 -Dsonar.sources=. \
                                 -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info \
                                 -Dsonar.host.url=$SONAR_HOST_URL \
                                 -Dsonar.login=$SONAR_AUTH_TOKEN
-                        """
+                        '''
                     }
                 }
             }
