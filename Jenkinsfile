@@ -62,7 +62,6 @@ pipeline {
     agent {
         docker {
             image 'node:18-alpine'
-            // Mount docker socket if you need docker-in-docker
             args '-v /var/run/docker.sock:/var/run/docker.sock'
         }
     }
@@ -83,10 +82,11 @@ pipeline {
         stage('Build & Test with Coverage') {
             steps {
                 script {
-                    // Install dependencies
                     sh 'npm install'
+                    // Fix permission issue
+                    sh 'chmod +x ./node_modules/.bin/jest'
                     // Run tests with coverage
-                    sh 'npm test -- --coverage'  
+                    sh 'npm test -- --coverage'
                 }
             }
         }
@@ -95,15 +95,17 @@ pipeline {
             steps {
                 withSonarQubeEnv('Sonar-server') {
                     script {
-                        // Install SonarScanner in the container
                         sh '''
-                            # Install SonarScanner
+                            # Install required utilities
+                            apk add --no-cache unzip wget
+
+                            # Download and unzip SonarScanner
                             wget -q https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.8.0.2856-linux.zip
                             unzip -q sonar-scanner-cli-4.8.0.2856-linux.zip
                             export PATH=$PATH:$(pwd)/sonar-scanner-4.8.0.2856-linux/bin
-                            
-                            # Run SonarQube analysis
-                            sonar-scanner \
+
+                            # Run SonarScanner
+                            ./sonar-scanner-4.8.0.2856-linux/bin/sonar-scanner \
                                 -Dsonar.projectKey=Project-five \
                                 -Dsonar.sources=. \
                                 -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info \
