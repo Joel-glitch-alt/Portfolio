@@ -3,4 +3,4 @@ function add(a, b) {
   return a + b;
 }
 
-module.exports = add;  // For Node.js and Jest
+module.exports = add; // For Node.js and Jest
