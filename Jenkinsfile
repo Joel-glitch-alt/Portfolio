@@ -11,8 +11,10 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('Sonar-server') {
+                    // Use SonarQube Scanner tool configured in Jenkins
+                    tool name: 'Sonar-scanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
                     sh '''
-                      sonar-scanner \
+                      ${tool('Sonar-scanner')}/bin/sonar-scanner \
                         -Dsonar.projectKey=Project-five \
                         -Dsonar.sources=. \
                         -Dsonar.host.url=$SONAR_HOST_URL \
