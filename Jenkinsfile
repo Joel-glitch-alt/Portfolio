@@ -63,7 +63,7 @@
     agent any
 
     tools {
-        nodejs "NodeJS-18" // Make sure this matches exactly with Global Tool Configuration
+        nodejs "NodeJS-20" // Make sure this matches exactly with Global Tool Configuration
     }
 
     environment {
