@@ -58,7 +58,8 @@
 
 
 // //Option 2pipeline 
-pipeline {
+
+ pipeline {
     agent any
 
     tools {
@@ -138,3 +139,4 @@ pipeline {
         }
     }
 }
+    
