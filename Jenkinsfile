@@ -56,12 +56,15 @@
 // }
 
 
-// Option 2
-pipeline {
-    agent any
 
-    tools {
-        nodejs 'NodeJS-18' // Name from Global Tool Configuration
+//Option 2
+
+pipeline {
+    agent {
+        docker {
+            image 'node:18-alpine'
+            args '-v /var/run/docker.sock:/var/run/docker.sock'
+        }
     }
 
     environment {
@@ -78,7 +81,9 @@ pipeline {
         stage('Build & Test with Coverage') {
             steps {
                 script {
+                    // Install dependencies
                     sh 'npm install'
+                    // Run tests with coverage
                     sh 'npm test -- --coverage'  
                 }
             }
