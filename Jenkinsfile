@@ -1,3 +1,62 @@
+// Working
+// pipeline {
+//     agent any
+
+//     environment {
+//         SONAR_AUTH_TOKEN = credentials('SonarQube-token')
+//     }
+
+//     stages {
+//         stage('Say Hello') {
+//             steps {
+//                 echo 'Hello from Jenkins pipeline!'
+//             }
+//         }
+
+//         stage('SonarQube Analysis') {
+//             steps {
+//                 withSonarQubeEnv('Sonar-server') {
+//                     script {
+//                         def scannerHome = tool name: 'SonarScanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
+//                         sh """
+//                             ${scannerHome}/bin/sonar-scanner \
+//                                 -Dsonar.projectKey=Project-five \
+//                                 -Dsonar.sources=. \
+//                                 -Dsonar.host.url=$SONAR_HOST_URL \
+//                                 -Dsonar.login=$SONAR_AUTH_TOKEN
+//                         """
+//                     }
+//                 }
+//             }
+//         }
+
+//         stage('Quality Gate') {
+//             steps {
+//                 timeout(time: 5, unit: 'MINUTES') {
+//                     waitForQualityGate abortPipeline: true
+//                 }
+//             }
+//         }
+//     }
+
+//     post {
+//         always {
+//             cleanWs()
+//         }
+//         failure {
+//             echo '❌ Build failed. Check the logs above.'
+//         }
+//         unstable {
+//             echo '⚠️ Build unstable due to test failures.'
+//         }
+//         success {
+//             echo '✅ Build completed successfully...'
+//         }
+//     }
+// }
+
+
+
 pipeline {
     agent any
 
@@ -12,6 +71,18 @@ pipeline {
             }
         }
 
+        stage('Build & Test with Coverage') {
+            steps {
+                script {
+                    // Adjust this command based on your language & test framework
+                    // Example: for Node.js + Jest coverage
+                    sh 'npm install'
+                    sh 'npm test -- --coverage'  
+                    // This will create coverage report under coverage/lcov.info by default
+                }
+            }
+        }
+
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('Sonar-server') {
@@ -21,6 +92,7 @@ pipeline {
                             ${scannerHome}/bin/sonar-scanner \
                                 -Dsonar.projectKey=Project-five \
                                 -Dsonar.sources=. \
+                                -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info \
                                 -Dsonar.host.url=$SONAR_HOST_URL \
                                 -Dsonar.login=$SONAR_AUTH_TOKEN
                         """
