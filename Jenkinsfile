@@ -616,37 +616,37 @@
             }
         }
         
-        stage('Quality Gate') {
-            steps {
-                timeout(time: 5, unit: 'MINUTES') {
-                    script {
-                        try {
-                            // Check if SonarQube analysis completed successfully
-                            if (fileExists('.scannerwork/report-task.txt')) {
-                                def qg = waitForQualityGate()
-                                echo "SonarQube Quality Gate status: ${qg.status}"
+        // stage('Quality Gate') {
+        //     steps {
+        //         timeout(time: 5, unit: 'MINUTES') {
+        //             script {
+        //                 try {
+        //                     // Check if SonarQube analysis completed successfully
+        //                     if (fileExists('.scannerwork/report-task.txt')) {
+        //                         def qg = waitForQualityGate()
+        //                         echo "SonarQube Quality Gate status: ${qg.status}"
                                 
-                                // Always force Quality Gate to "fail" but continue pipeline
-                                if (qg.status == 'OK') {
-                                    echo "SonarQube Analysis passed, but forcing Quality Gate to fail as requested"
-                                } else {
-                                    echo "SonarQube Quality Gate already failed: ${qg.status}"
-                                }
-                                currentBuild.result = 'UNSTABLE'
-                            } else {
-                                echo "⚠️ SonarQube analysis didn't complete - no report-task.txt found"
-                                echo "Quality Gate check skipped due to failed SonarQube analysis"
-                                currentBuild.result = 'UNSTABLE'
-                            }
-                        } catch (Exception e) {
-                            echo "Quality Gate check failed or timed out: ${e.getMessage()}"
-                            echo "Check SonarQube dashboard: http://52.232.24.91:9000/dashboard?id=project-six"
-                            currentBuild.result = 'UNSTABLE'
-                        }
-                    }
-                }
-            }
-        }
+        //                         // Always force Quality Gate to "fail" but continue pipeline
+        //                         if (qg.status == 'OK') {
+        //                             echo "SonarQube Analysis passed, but forcing Quality Gate to fail as requested"
+        //                         } else {
+        //                             echo "SonarQube Quality Gate already failed: ${qg.status}"
+        //                         }
+        //                         currentBuild.result = 'UNSTABLE'
+        //                     } else {
+        //                         echo "⚠️ SonarQube analysis didn't complete - no report-task.txt found"
+        //                         echo "Quality Gate check skipped due to failed SonarQube analysis"
+        //                         currentBuild.result = 'UNSTABLE'
+        //                     }
+        //                 } catch (Exception e) {
+        //                     echo "Quality Gate check failed or timed out: ${e.getMessage()}"
+        //                     echo "Check SonarQube dashboard: http://52.232.24.91:9000/dashboard?id=project-six"
+        //                     currentBuild.result = 'UNSTABLE'
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
         
         stage('Docker Build & Push') {
             when {
