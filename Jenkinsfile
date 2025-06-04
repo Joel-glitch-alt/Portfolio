@@ -215,7 +215,7 @@
         
         stage('SonarQube Analysis') {
             steps {
-                withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_TOKEN')]) {
+                withCredentials([string(credentialsId: 'mysonar-token', variable: 'SONAR_TOKEN')]) {
                     withSonarQubeEnv('Sonar-server') {
                         sh '''
                             # Set Java path if available
