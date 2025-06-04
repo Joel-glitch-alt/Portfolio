@@ -338,7 +338,7 @@
             echo '❌ Pipeline failed. Check logs for details.'
         }
         unstable {
-            echo '⚠️ Pipeline completed with warnings...'
+            echo '⚠️ Pipeline completed with warnings....'
         }
     }
 }
