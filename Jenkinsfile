@@ -217,32 +217,63 @@
             steps {
                 withCredentials([string(credentialsId: 'mysonar-token', variable: 'SONAR_TOKEN')]) {
                     withSonarQubeEnv('Sonar-server') {
+                        // sh '''
+                        //     # Set Java path if available
+                        //     if [ -d /usr/lib/jvm/java-17-openjdk-amd64 ]; then
+                        //         export PATH=/usr/lib/jvm/java-17-openjdk-amd64/bin:$PATH
+                        //     fi
+                            
+                        //     # Build sonar-scanner command
+                        //     SONAR_CMD="sonar-scanner"
+                        //     SONAR_CMD="$SONAR_CMD -Dsonar.projectKey=project-six"
+                        //     SONAR_CMD="$SONAR_CMD -Dsonar.projectName=\\"Project Six\\""
+                        //     SONAR_CMD="$SONAR_CMD -Dsonar.sources=."
+                        //     SONAR_CMD="$SONAR_CMD -Dsonar.exclusions=**/node_modules/**,**/coverage/**,**/dist/**,**/build/**,**/*.min.js,**/public/**,.git/**,**/.git/**,**/*.test.js,**/*.spec.js"
+                        //     SONAR_CMD="$SONAR_CMD -Dsonar.test.inclusions=**/*.test.js,**/*.spec.js"
+                        //     SONAR_CMD="$SONAR_CMD -Dsonar.coverage.exclusions=**/node_modules/**,**/coverage/**,**/dist/**,**/*.test.js,**/*.spec.js"
+                        //     SONAR_CMD="$SONAR_CMD -Dsonar.sourceEncoding=UTF-8"
+                        //     SONAR_CMD="$SONAR_CMD -Dsonar.token=${SONAR_TOKEN}"
+                            
+                        //     # Add coverage parameter if file exists
+                        //     if [ -f "coverage/lcov.info" ]; then
+                        //         SONAR_CMD="$SONAR_CMD -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info"
+                        //     fi
+                            
+                        //     # Execute the command
+                        //     echo "Running: $SONAR_CMD"
+                        //     eval $SONAR_CMD
+                        // '''
                         sh '''
-                            # Set Java path if available
-                            if [ -d /usr/lib/jvm/java-17-openjdk-amd64 ]; then
-                                export PATH=/usr/lib/jvm/java-17-openjdk-amd64/bin:$PATH
-                            fi
-                            
-                            # Build sonar-scanner command
-                            SONAR_CMD="sonar-scanner"
-                            SONAR_CMD="$SONAR_CMD -Dsonar.projectKey=project-six"
-                            SONAR_CMD="$SONAR_CMD -Dsonar.projectName=\\"Project Six\\""
-                            SONAR_CMD="$SONAR_CMD -Dsonar.sources=."
-                            SONAR_CMD="$SONAR_CMD -Dsonar.exclusions=**/node_modules/**,**/coverage/**,**/dist/**,**/build/**,**/*.min.js,**/public/**,.git/**,**/.git/**,**/*.test.js,**/*.spec.js"
-                            SONAR_CMD="$SONAR_CMD -Dsonar.test.inclusions=**/*.test.js,**/*.spec.js"
-                            SONAR_CMD="$SONAR_CMD -Dsonar.coverage.exclusions=**/node_modules/**,**/coverage/**,**/dist/**,**/*.test.js,**/*.spec.js"
-                            SONAR_CMD="$SONAR_CMD -Dsonar.sourceEncoding=UTF-8"
-                            SONAR_CMD="$SONAR_CMD -Dsonar.token=${SONAR_TOKEN}"
-                            
-                            # Add coverage parameter if file exists
-                            if [ -f "coverage/lcov.info" ]; then
+                               # Set Java path if available
+                                 if [ -d /usr/lib/jvm/java-17-openjdk-amd64 ]; then
+                                 export PATH=/usr/lib/jvm/java-17-openjdk-amd64/bin:$PATH
+                                 fi
+
+                               # Ensure Node.js is available
+                                 export NODE_PATH=$(which node)
+
+                               # Build sonar-scanner command
+                                 SONAR_CMD="sonar-scanner"
+                                 SONAR_CMD="$SONAR_CMD -Dsonar.projectKey=project-six"
+                                 SONAR_CMD="$SONAR_CMD -Dsonar.projectName=\\"Project Six\\""
+                                 SONAR_CMD="$SONAR_CMD -Dsonar.sources=."
+                                 SONAR_CMD="$SONAR_CMD -Dsonar.exclusions=**/node_modules/**,**/coverage/**,**/dist/**,**/build/**,**/*.min.js,**/public/**,.git/**,**/.git/**,**/*.test.js,**/*.spec.js"
+                                 SONAR_CMD="$SONAR_CMD -Dsonar.test.inclusions=**/*.test.js,**/*.spec.js"
+                                 SONAR_CMD="$SONAR_CMD -Dsonar.coverage.exclusions=**/node_modules/**,**/coverage/**,**/dist/**,**/*.test.js,**/*.spec.js"
+                                 SONAR_CMD="$SONAR_CMD -Dsonar.sourceEncoding=UTF-8"
+                                 SONAR_CMD="$SONAR_CMD -Dsonar.token=${SONAR_TOKEN}"
+                                 SONAR_CMD="$SONAR_CMD -Dsonar.nodejs.executable=$(which node)"
+
+                              # Add coverage parameter if file exists
+                                if [ -f "coverage/lcov.info" ]; then
                                 SONAR_CMD="$SONAR_CMD -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info"
-                            fi
-                            
-                            # Execute the command
-                            echo "Running: $SONAR_CMD"
-                            eval $SONAR_CMD
-                        '''
+                                fi
+ 
+                              # Execute the command
+                                echo "Running: $SONAR_CMD"
+                                eval $SONAR_CMD
+                             '''
+
                     }
                 }
             }
