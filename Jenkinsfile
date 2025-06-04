@@ -451,7 +451,7 @@
                              // Quality Gate should move on to the next stage even if it fails
         stage('Quality Gate') {
                              steps {
-                             timeout(time: 15, unit: 'MINUTES') {
+                             timeout(time: 14, unit: 'MINUTES') {
                              script {
                              try {
                              def qg = waitForQualityGate()
