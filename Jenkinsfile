@@ -234,10 +234,9 @@
                             sonar-scanner \
                                 -Dsonar.projectKey=project-six \
                                 -Dsonar.projectName="Project Six" \
-                                -Dsonar.sources=src \
-                                -Dsonar.tests=src \
+                                -Dsonar.sources=. \
+                                -Dsonar.exclusions="**/node_modules/**,**/coverage/**,**/dist/**,**/build/**,**/*.min.js,**/public/**,.git/**,**/.git/**" \
                                 -Dsonar.test.inclusions="**/*.test.js,**/*.spec.js" \
-                                -Dsonar.exclusions="**/node_modules/**,**/coverage/**,**/dist/**,**/build/**,**/*.min.js,**/public/**" \
                                 -Dsonar.coverage.exclusions="**/node_modules/**,**/coverage/**,**/dist/**,**/*.test.js,**/*.spec.js" \
                                 -Dsonar.sourceEncoding=UTF-8 \
                                 -Dsonar.token=$SONAR_TOKEN \
@@ -250,19 +249,23 @@
         
         stage('Quality Gate') {
             steps {
-                timeout(time: 20, unit: 'MINUTES') {
+                timeout(time: 5, unit: 'MINUTES') {
                     script {
                         try {
-                            def qg = waitForQualityGate()
+                            echo "Waiting for Quality Gate result..."
+                            def qg = waitForQualityGate abortPipeline: false
+                            echo "Quality Gate status: ${qg.status}"
+                            
                             if (qg.status != 'OK') {
-                                echo "Quality Gate failed: ${qg.status}"
-                                // Don't fail the pipeline, just warn
+                                echo "⚠️ Quality Gate failed with status: ${qg.status}"
+                                echo "Check SonarQube dashboard for details"
                                 currentBuild.result = 'UNSTABLE'
                             } else {
-                                echo "Quality Gate passed!"
+                                echo "✅ Quality Gate passed successfully!"
                             }
                         } catch (Exception e) {
-                            echo "Quality Gate check failed or timed out: ${e.getMessage()}"
+                            echo "⚠️ Quality Gate timeout or error: ${e.getMessage()}"
+                            echo "Pipeline will continue - check SonarQube manually"
                             currentBuild.result = 'UNSTABLE'
                         }
                     }
@@ -311,4 +314,3 @@
         }
     }
 }
-    
