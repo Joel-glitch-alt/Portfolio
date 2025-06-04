@@ -160,8 +160,7 @@
         PATH = "${tool('SonarScanner')}/bin:${env.PATH}"
         DOCKER_IMAGE = 'addition1905/project-six:latest'
         JAVA_HOME = '/usr/lib/jvm/java-17-openjdk-amd64'
-       // SONAR_SCANNER_OPTS = "-Xmx4096m"
-        SONAR_SCANNER_OPTS = "-Xmx4096m -Dsonar.scanner.socketTimeout=300 -Dsonar.scanner.responseTimeout=300"
+        SONAR_SCANNER_OPTS = "-Xmx4096m"
     }
     
     stages {
